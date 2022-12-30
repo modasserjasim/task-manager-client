@@ -21,32 +21,36 @@ const TaskList = () => {
     return (
         <>
             {
-                tasks?.map((task, index) =>
-                    <div key={task._id} className="col taskBg">
-                        <div className={task.isTaskCompleted ? 'done' : ''}>
-                            <span className="taskNumber">{index + 1}</span>
-                            <span className="taskText">{task.taskName}</span>
-                        </div>
-                        <div className="iconsWrap">
-                            <span title="Completed / Not Completed"
-                            >
-                                <FontAwesomeIcon icon={faCircleCheck} />
-                            </span>
+                tasks && tasks.length ? <>
+                    {
+                        tasks?.map((task, index) =>
+                            <div key={task._id} className="col taskBg">
+                                <div className={task.isTaskCompleted ? 'done' : ''}>
+                                    <span className="taskNumber">{index + 1}</span>
+                                    <span className="taskText">{task.taskName}</span>
+                                </div>
+                                <div className="iconsWrap">
+                                    <span title="Completed / Not Completed"
+                                    >
+                                        <FontAwesomeIcon icon={faCircleCheck} />
+                                    </span>
 
-                            {task.status ? null : (
-                                <span title="Edit"
-                                >
-                                    <FontAwesomeIcon icon={faPen} />
-                                </span>
-                            )}
+                                    {task.status ? null : (
+                                        <span title="Edit"
+                                        >
+                                            <FontAwesomeIcon icon={faPen} />
+                                        </span>
+                                    )}
 
-                            <span title="Delete"
-                            >
-                                <FontAwesomeIcon icon={faTrashCan} />
-                            </span>
-                        </div>
-                    </div>
-                )
+                                    <span title="Delete"
+                                    >
+                                        <FontAwesomeIcon icon={faTrashCan} />
+                                    </span>
+                                </div>
+                            </div>
+                        )
+                    }
+                </> : <p className='text-center'>You didn't create any tasks yet...</p>
             }
         </>
     );

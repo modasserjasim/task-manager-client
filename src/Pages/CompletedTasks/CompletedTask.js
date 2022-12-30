@@ -50,7 +50,8 @@ const CompletedTask = () => {
                         </div>
                     )
                 }
-            </> : 'No Completed Tasks...'}
+            </> : <p className='text-center'>No Completed Tasks...</p>
+            }
 
         </div>
     );

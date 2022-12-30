@@ -34,28 +34,8 @@ const Login = () => {
             .then(result => {
                 const user = result.user;
                 navigate(from, { replace: true });
-                saveUserToDB(user);
                 toast.success(`${user.displayName}, you have successfully logged in!`)
 
-
-            })
-    }
-
-    const saveUserToDB = user => {
-        const currentUser = {
-            name: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL
-        };
-        fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`, {
-            method: "PUT",
-            headers: {
-                "content-type": "application/json"
-            },
-            body: JSON.stringify(currentUser)
-        })
-            .then(res => res.json())
-            .then(data => {
 
             })
     }
@@ -67,21 +47,21 @@ const Login = () => {
                     <div className="container px-4 mx-auto">
                         <div className="flex flex-wrap">
                             <div className="w-full">
-                                <div className="md:max-w-xl mx-auto">
-                                    <h2 className="mb-16 text-4xl sm:text-6xl md:text-7xl font-bold font-heading tracking-px-n leading-tight">Sign in and start using Task Manager.</h2>
-                                    <h3 className="mb-9 text-xl font-bold font-heading leading-normal">Why should you join us?</h3>
+                                <div className="md:max-w-lg mx-auto">
+                                    <h2 className="mb-16 text-4xl sm:text-6xl md:text-5xl font-bold font-heading tracking-px-n leading-tight">Sign in and organize your work and life, finally.</h2>
+                                    <h3 className="mb-9 text-xl font-bold font-heading leading-normal">Become focused, organized, and calm with Task Manager.</h3>
                                     <ul className="md:max-w-xs">
                                         <li className="mb-5 flex flex-wrap">
-                                            <svg className="mr-2" width="25" height="26" viewbox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 23C18.0228 23 22.5 18.5228 22.5 13C22.5 7.47715 18.0228 3 12.5 3C6.97715 3 2.5 7.47715 2.5 13C2.5 18.5228 6.97715 23 12.5 23ZM17.1339 11.3839C17.622 10.8957 17.622 10.1043 17.1339 9.61612C16.6457 9.12796 15.8543 9.12796 15.3661 9.61612L11.25 13.7322L9.63388 12.1161C9.14573 11.628 8.35427 11.628 7.86612 12.1161C7.37796 12.6043 7.37796 13.3957 7.86612 13.8839L10.3661 16.3839C10.8543 16.872 11.6457 16.872 12.1339 16.3839L17.1339 11.3839Z" fill="#4F46E5"></path>
+                                            <svg className="mr-2 text-green-800" width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M12.5 23C18.0228 23 22.5 18.5228 22.5 13C22.5 7.47715 18.0228 3 12.5 3C6.97715 3 2.5 7.47715 2.5 13C2.5 18.5228 6.97715 23 12.5 23ZM17.1339 11.3839C17.622 10.8957 17.622 10.1043 17.1339 9.61612C16.6457 9.12796 15.8543 9.12796 15.3661 9.61612L11.25 13.7322L9.63388 12.1161C9.14573 11.628 8.35427 11.628 7.86612 12.1161C7.37796 12.6043 7.37796 13.3957 7.86612 13.8839L10.3661 16.3839C10.8543 16.872 11.6457 16.872 12.1339 16.3839L17.1339 11.3839Z" fill="green"></path>
                                             </svg>
-                                            <span className="flex-1 font-medium leading-relaxed">The best you can do in no time at all, amazing feature goes here</span>
+                                            <span className="flex-1 font-medium leading-relaxed">Add your tasks. Organize your life. Achieve more every day.</span>
                                         </li>
                                         <li className="mb-5 flex flex-wrap">
-                                            <svg className="mr-2" width="25" height="26" viewbox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 23C18.0228 23 22.5 18.5228 22.5 13C22.5 7.47715 18.0228 3 12.5 3C6.97715 3 2.5 7.47715 2.5 13C2.5 18.5228 6.97715 23 12.5 23ZM17.1339 11.3839C17.622 10.8957 17.622 10.1043 17.1339 9.61612C16.6457 9.12796 15.8543 9.12796 15.3661 9.61612L11.25 13.7322L9.63388 12.1161C9.14573 11.628 8.35427 11.628 7.86612 12.1161C7.37796 12.6043 7.37796 13.3957 7.86612 13.8839L10.3661 16.3839C10.8543 16.872 11.6457 16.872 12.1339 16.3839L17.1339 11.3839Z" fill="#4F46E5"></path>
+                                            <svg className="mr-2 text-green-800" width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M12.5 23C18.0228 23 22.5 18.5228 22.5 13C22.5 7.47715 18.0228 3 12.5 3C6.97715 3 2.5 7.47715 2.5 13C2.5 18.5228 6.97715 23 12.5 23ZM17.1339 11.3839C17.622 10.8957 17.622 10.1043 17.1339 9.61612C16.6457 9.12796 15.8543 9.12796 15.3661 9.61612L11.25 13.7322L9.63388 12.1161C9.14573 11.628 8.35427 11.628 7.86612 12.1161C7.37796 12.6043 7.37796 13.3957 7.86612 13.8839L10.3661 16.3839C10.8543 16.872 11.6457 16.872 12.1339 16.3839L17.1339 11.3839Z" fill="green"></path>
                                             </svg>
-                                            <span className="flex-1 font-medium leading-relaxed">24/7 Support of our dedicated, highly professional team</span>
+                                            <span className="flex-1 font-medium leading-relaxed">Delightfully simple and deceptively powerful task management</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -149,7 +129,7 @@ const Login = () => {
                                 </div>
 
                                 <div className="mt-8">
-                                    <button type="submit" className="text-lg rounded-md font-semibold leading-none text-white focus:outline-none bg-green-800 border hover:bg-secondary py-4 w-full">
+                                    <button type="submit" className="text-lg rounded-md font-semibold leading-none text-white focus:outline-none bg-green-800 border hover:bg-green-700 py-4 w-full">
                                         {loading ? <Spinner /> : 'Sign in now'}
                                     </button>
                                     <p className="text-sm mt-4 font-medium leading-none text-gray-500">
