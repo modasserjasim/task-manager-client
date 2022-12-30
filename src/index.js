@@ -12,7 +12,7 @@ root.render(
     <AuthProvider>
       <App />
       <ToastContainer
-        position="bottom-center"
+        position="top-center"
         autoClose={2000}
       />
     </AuthProvider>

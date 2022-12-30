@@ -4,6 +4,7 @@ import ToDo from '../../components/ToDo';
 import UpdateForm from '../../components/UpdateForm';
 
 const AddTask = () => {
+
     // Tasks (ToDo List) State
     //////////////////////////
     const [toDo, setToDo] = useState([
@@ -110,10 +111,8 @@ const AddTask = () => {
 
     }
     return (
-        <div className="container App">
-
-            <br /><br />
-            <h2>To Do List App (ReactJS)</h2>
+        <div className="max-w-5xl mx-auto py-16">
+            <h2 className='text-center text-3xl font-bold'>ADD YOUR NEW TASK!</h2>
             <br /><br />
 
             {updateData && updateData ? (

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 import { toast } from 'react-toastify';
 import { BsEye, BsEyeSlash } from "react-icons/bs";
@@ -11,14 +11,9 @@ const SignUp = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const { createUser, updateUserProfile, loading, setLoading, signInWithGoogle } = useContext(AuthContext);
 
-    //from JWT TOKEN HOOK
-    // const [createdUserEmail, setCreatedUserEmail] = useState('');
-    // const [token] = useToken(createdUserEmail);
-
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
     const navigate = useNavigate();
-    // if (token) {
-    //     navigate('/');
-    // }
 
     const handleSignUp = data => {
         // console.log(data);
@@ -45,6 +40,7 @@ const SignUp = () => {
                                 .then(() => {
                                     saveUserToDB(user.displayName, user.email, user.photoURL)
                                     setLoading(false);
+                                    navigate(from, { replace: true });
                                 })
                                 .catch(err => toast.error(err));
 
@@ -61,6 +57,7 @@ const SignUp = () => {
         signInWithGoogle()
             .then(result => {
                 const user = result.user;
+                navigate(from, { replace: true });
                 saveUserToDB(user);
                 toast.success(`${user.displayName}, you have successfully logged in!`)
 
