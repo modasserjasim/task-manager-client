@@ -1,46 +1,72 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
-import app from '../../firebase/firebase.config';
+import React, { useState, useEffect } from 'react'
+import { createContext } from 'react'
+import {
+    createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile,
+} from 'firebase/auth'
+import app from '../../firebase/firebase.config'
+import { toast } from 'react-toastify'
 
-export const AuthContext = createContext();
+export const AuthContext = createContext()
 const auth = getAuth(app)
 
-const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+const googleProvider = new GoogleAuthProvider()
 
+const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    //Create User
     const createUser = (email, password) => {
-        setLoading(true);
-        return createUserWithEmailAndPassword(auth, email, password);
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth, email, password)
     }
+
+    //Update Name and photoURL
+    const updateUserProfile = (name, photo) => {
+        setLoading(true)
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: photo,
+        })
+    }
+
+    // Handle Google Signin
+    const signInWithGoogle = () => {
+        setLoading(true)
+        return signInWithPopup(auth, googleProvider)
+    }
+
+    // handle Logout
+    const logout = () => {
+        setLoading(true)
+        localStorage.removeItem('computerBazar-token')
+        toast.success('You have just logged out from Computer Bazar');
+        return signOut(auth)
+    }
+
+    // sign in with email and Password
     const loginWithEmail = (email, password) => {
-        setLoading(true);
+        setLoading(true)
         return signInWithEmailAndPassword(auth, email, password)
     }
 
-    const loginWithGoogle = (provider) => {
-        setLoading(true);
-        return signInWithPopup(auth, provider);
+    //reset Password
+    const resetPassword = email => {
+        setLoading(true)
+        return sendPasswordResetEmail(auth, email)
     }
-    const updateUserProfile = (profile) => {
-        setLoading(true);
-        return updateProfile(auth.currentUser, profile);
-    }
-
-    const logOut = () => {
-        localStorage.removeItem('panorama-token');
-        return signOut(auth);
-    }
-
 
     useEffect(() => {
+        //on statechange observer
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
-            setUser(currentUser);
-            setLoading(false);
-        });
+            console.log('observer', currentUser);
+            setUser(currentUser)
+            setLoading(false)
+        })
 
         return () => {
-            return unsubscribe();
+
+            unsubscribe()
         }
     }, [])
 
@@ -48,17 +74,17 @@ const AuthProvider = ({ children }) => {
         user,
         loading,
         createUser,
-        loginWithEmail,
-        loginWithGoogle,
         updateUserProfile,
-        logOut
+        signInWithGoogle,
+        logout,
+        loginWithEmail,
+        resetPassword,
+        setLoading,
     }
 
     return (
-        <AuthContext.Provider value={authInfo}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+        <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    )
+}
 
-export default AuthProvider;
+export default AuthProvider
