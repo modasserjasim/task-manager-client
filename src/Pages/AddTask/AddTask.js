@@ -7,8 +7,9 @@ import UpdateForm from '../../components/UpdateForm';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-    faCircleCheck, faPen, faTrashCan
+    faCircleCheck, faPen, faTrashCan, faCircleXmark
 } from '@fortawesome/free-solid-svg-icons'
+import { toast } from 'react-toastify';
 
 const AddTask = () => {
     const { user } = useContext(AuthContext);
@@ -21,6 +22,64 @@ const AddTask = () => {
             return data.tasks;
         }
     })
+
+    //handle mark the task as complete
+    const handleCompleteTask = id => {
+        console.log('mark as completed');
+        fetch(`${process.env.REACT_APP_API_URL}/my-task/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({ status: true })
+        })
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data);
+                if (data.status) {
+                    refetch();
+                    toast.success(data.message);
+                }
+
+            })
+    }
+    //handle mark the task as complete
+    const handleAvailableTask = id => {
+        console.log('mark as uncompleted');
+        fetch(`${process.env.REACT_APP_API_URL}/my-task/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({ status: false })
+        })
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data);
+                if (data.status) {
+                    refetch();
+                    toast.success(data.message);
+                }
+
+            })
+    }
+
+    // remove the task
+    const handleTaskDelete = id => {
+        fetch(`${process.env.REACT_APP_API_URL}/my-task/${id}`, {
+            method: "DELETE"
+        })
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data);
+                if (data.status) {
+                    refetch();
+                    toast.success(data.message);
+                }
+            })
+    }
+
+
     // Tasks (ToDo List) State
     //////////////////////////
     const [toDo, setToDo] = useState([
@@ -92,40 +151,6 @@ const AddTask = () => {
         setUpdateData('')
     }
 
-    // Change task for update
-    /////////////////////////
-    const changeHolder = (e) => {
-
-        // let newEntry = {
-        //   id: updateData.id,
-        //   title: e.target.value,
-        //   status: updateData.status ? true : false
-        // }
-        // setUpdateData(newEntry)
-
-        // refactored
-        setUpdateData({ ...updateData, title: e.target.value })
-
-    }
-
-    // Update task
-    //////////////
-    const updateTask = () => {
-
-        // let filterRecords = [...toDo].filter( task => task.id !== updateData.id )
-        // let updatedObject = [...filterRecords, updateData]
-        // setToDo(updatedObject)
-
-        // refactored
-        let removeOldRecord = [...toDo].filter(task => task.id !== updateData.id)
-        setToDo([
-            ...removeOldRecord,
-            updateData
-        ])
-
-        setUpdateData('')
-
-    }
     return (
         <div className="max-w-5xl mx-auto py-16">
             <h2 className='text-center text-3xl font-bold'>ADD YOUR NEW TASK!</h2>
@@ -134,17 +159,12 @@ const AddTask = () => {
             {updateData && updateData ? (
                 <UpdateForm
                     updateData={updateData}
-                    changeHolder={changeHolder}
-                    updateTask={updateTask}
                     cancelUpdate={cancelUpdate}
                 />
             ) : (
                 <AddTaskForm
                     refetch={refetch}
                     isLoading={isLoading}
-                    newTask={newTask}
-                    setNewTask={setNewTask}
-                    addTask={addTask}
                 />
             )}
 
@@ -158,19 +178,29 @@ const AddTask = () => {
                                     <span className="taskText">{task.taskName}</span>
                                 </div>
                                 <div className="iconsWrap">
-                                    <span title="Completed / Not Completed"
-                                    >
-                                        <FontAwesomeIcon icon={faCircleCheck} />
-                                    </span>
+                                    {
+                                        task.isTaskCompleted ?
+                                            <span title="Mark as not completed"
+                                                onClick={() => handleAvailableTask(task._id)}>
+                                                <FontAwesomeIcon icon={faCircleXmark} />
+                                            </span> :
+                                            <span className='text-red-800' title="Mark as Completed"
+                                                onClick={() => handleCompleteTask(task._id)}><FontAwesomeIcon icon={faCircleCheck} /></span>
+                                    }
 
-                                    {task.status ? null : (
+
+
+
+                                    {task.isTaskCompleted ? null : (
                                         <span title="Edit"
+                                            onClick={() => setUpdateData(task)}
                                         >
                                             <FontAwesomeIcon icon={faPen} />
                                         </span>
                                     )}
 
                                     <span title="Delete"
+                                        onClick={() => handleTaskDelete(task._id)}
                                     >
                                         <FontAwesomeIcon icon={faTrashCan} />
                                     </span>
@@ -180,13 +210,6 @@ const AddTask = () => {
                     }
                 </> : <p className='text-center'>You didn't create any tasks yet...</p>}
             </div>
-
-            {/* <ToDo
-                toDo={toDo}
-                markDone={markDone}
-                setUpdateData={setUpdateData}
-                deleteTask={deleteTask}
-            /> */}
 
 
         </div>
