@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../context/AuthProvider/AuthProvider';
 import Spinner from './Spinner';
 
-const AddTaskForm = () => {
+const AddTaskForm = ({ isLoading, refetch }) => {
   const { user } = useContext(AuthContext);
   const { register, formState: { errors }, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
@@ -51,6 +51,7 @@ const AddTaskForm = () => {
             .then(result => {
               if (result.status) {
                 setLoading(false);
+                refetch();
                 toast.success(result.message);
 
               } else {
@@ -61,11 +62,14 @@ const AddTaskForm = () => {
         }
       })
   }
+  if (isLoading) {
+    return <Spinner></Spinner>
+  }
   return (
     <div className='flex justify-center items-center'>
       <form onSubmit={handleSubmit(handleAddTask)} className="bg-white shadow rounded w-full   p-5 md:p-10">
         <div className="relative">
-          <input {...register("taskTitle", { required: "Task Title is required" })} type="text" name='taskTitle' id="floating_outlined_taskTitle" className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-primary peer" placeholder=" " />
+          <input {...register("taskTitle", { required: "Task Title is required" })} type="text" name='taskTitle' id="floating_outlined_taskTitle" className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-primary peer" placeholder=" " required />
           <label htmlFor="floating_outlined_taskTitle" className="absolute text-md text-gray-500  duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-gray-900 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Task Title</label>
           <div>
             {errors.taskTitle && <p role="alert" className='text-red-700 text-xs'>{errors.taskTitle?.message}</p>}
