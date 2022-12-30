@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AddTaskForm from '../../components/AddTaskForm';
+import TaskList from '../../components/TaskList';
 import ToDo from '../../components/ToDo';
 import UpdateForm from '../../components/UpdateForm';
 
@@ -132,12 +133,13 @@ const AddTask = () => {
 
             {toDo && toDo.length ? '' : 'No Tasks...'}
 
-            <ToDo
+            {/* <ToDo
                 toDo={toDo}
                 markDone={markDone}
                 setUpdateData={setUpdateData}
                 deleteTask={deleteTask}
-            />
+            /> */}
+            <TaskList></TaskList>
 
         </div>
     );
