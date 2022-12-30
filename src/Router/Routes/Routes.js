@@ -6,6 +6,7 @@ import Home from "../../Pages/Home/Home";
 import Login from "../../Pages/Login/Login";
 import MyTasks from "../../Pages/MyTasks/MyTasks";
 import SignUp from "../../Pages/SignUp/SignUp";
+import PrivateRoute from "./PrivateRoute/PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -14,19 +15,15 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <Home></Home>,
-            },
-            {
-                path: '/add-task',
-                element: <AddTask></AddTask>
+                element: <PrivateRoute><AddTask></AddTask></PrivateRoute>
             },
             {
                 path: '/my-tasks',
-                element: <MyTasks></MyTasks>
+                element: <PrivateRoute><MyTasks></MyTasks></PrivateRoute>
             },
             {
                 path: '/completed-tasks',
-                element: <CompletedTask></CompletedTask>
+                element: <PrivateRoute><CompletedTask></CompletedTask></PrivateRoute>
             },
             {
                 path: '/login',

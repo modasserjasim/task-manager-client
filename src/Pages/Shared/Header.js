@@ -7,13 +7,13 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 
 const Header = () => {
-    const { user, logOut } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const [navbar, setNavbar] = useState(false);
 
     const handleLogOut = () => {
-        logOut()
+        logout()
             .then(() => {
-                toast.success('You have logged out from the site');
+
             })
             .catch((error) => {
                 toast.error(error.message);
@@ -57,7 +57,7 @@ const Header = () => {
                         <div className='flex items-center space-x-6'>
                             <ul className="items-center justify-center space-y-4 md:flex md:space-x-8 md:space-y-0 font-semibold uppercase">
                                 <li className=" hover:text-green-800">
-                                    <NavLink to='/add-task' className={({ isActive }) => isActive ? 'text-green-800' : ''}>Add Task</NavLink>
+                                    <NavLink to='/' className={({ isActive }) => isActive ? 'text-green-800' : ''}>Add Task</NavLink>
                                 </li>
                                 <li className=" hover:text-green-800">
                                     <NavLink to='/my-tasks' className={({ isActive }) => isActive ? 'text-green-800' : ''}>My Tasks</NavLink>

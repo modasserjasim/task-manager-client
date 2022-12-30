@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 import { toast } from 'react-toastify';
 import { BsEye, BsEyeSlash } from "react-icons/bs";
@@ -12,18 +12,9 @@ const Login = () => {
     const { loginWithEmail, signInWithGoogle, loading, setLoading } = useContext(AuthContext);
     const [loginError, setLoginError] = useState('');
 
-    //JWT token hook
-    // const [loginUserEmail, setLoginUserEmail] = useState('');
-    // const [token] = useToken(loginUserEmail);
-
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
     const navigate = useNavigate();
-    // const location = useLocation();
-    // const from = location.state?.from?.pathname || "/";
-    // useEffect(() => {
-    //     if (token) {
-    //         navigate(from, { replace: true });
-    //     }
-    // }, [navigate, from, token])
 
     const handleLogin = data => {
         setLoginError('');
@@ -31,6 +22,7 @@ const Login = () => {
             .then(result => {
                 const user = result.user;
                 toast.success(`${user.displayName}, you have successfully logged in!`)
+                navigate(from, { replace: true });
             })
             .catch(err => {
                 setLoginError(err.code);
@@ -41,8 +33,10 @@ const Login = () => {
         signInWithGoogle()
             .then(result => {
                 const user = result.user;
+                navigate(from, { replace: true });
                 saveUserToDB(user);
                 toast.success(`${user.displayName}, you have successfully logged in!`)
+
 
             })
     }
@@ -51,8 +45,7 @@ const Login = () => {
         const currentUser = {
             name: user.displayName,
             email: user.email,
-            photoURL: user.photoURL,
-            role: 'buyer'
+            photoURL: user.photoURL
         };
         fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`, {
             method: "PUT",
@@ -70,12 +63,12 @@ const Login = () => {
     return (
         <section className="relative bg-white overflow-hidden">
             <div className="relative z-10 flex flex-wrap items-center -m-8 ">
-                <div className="w-full md:w-7/12 p-8 min-h-[85vh] py-6 bg-gradient-to-br from-blue-50 flex flex-col justify-center">
+                <div className="w-full md:w-7/12 p-8 md:min-h-[85vh] py-16 bg-gradient-to-br from-blue-50 flex flex-col justify-center">
                     <div className="container px-4 mx-auto">
                         <div className="flex flex-wrap">
                             <div className="w-full">
                                 <div className="md:max-w-xl mx-auto">
-                                    <h2 className="mb-16 text-6xl md:text-7xl font-bold font-heading tracking-px-n leading-tight">Sign in and start saving time today.</h2>
+                                    <h2 className="mb-16 text-4xl sm:text-6xl md:text-7xl font-bold font-heading tracking-px-n leading-tight">Sign in and start using Task Manager.</h2>
                                     <h3 className="mb-9 text-xl font-bold font-heading leading-normal">Why should you join us?</h3>
                                     <ul className="md:max-w-xs">
                                         <li className="mb-5 flex flex-wrap">
@@ -96,9 +89,9 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-full md:w-5/12 p-8 min-h-[85vh] bg-white my-6 flex flex-col justify-center">
+                <div className="w-full md:w-5/12 p-8 md:min-h-[85vh] bg-white mb-10 flex flex-col justify-center">
 
-                    <div className="max-w-md">
+                    <div className="md:max-w-md">
 
                         <div className="px-5">
                             <div>

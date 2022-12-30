@@ -38,8 +38,7 @@ const AuthProvider = ({ children }) => {
 
     // handle Logout
     const logout = () => {
-        setLoading(true)
-        localStorage.removeItem('computerBazar-token')
+        setLoading(true);
         toast.success('You have just logged out from Computer Bazar');
         return signOut(auth)
     }
